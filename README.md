@@ -1,34 +1,113 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# CityScout Realtors
 
-## Getting Started
+A full-stack real estate website for **CityScout Realtors**, a property agency operating in Abakaliki, Ebonyi State, Nigeria. Visitors can browse and filter property listings and read agency blog posts, while a password-protected admin dashboard lets staff manage all listings and posts without touching code.
 
-First, run the development server:
+Live domain: [cityscoutrealtors.com](https://cityscoutrealtors.com)
 
-```bash
-npm run dev
-# or
-yarn dev
+## Features
+
+### Public site
+- Landing page with hero/search section and featured properties
+- Property listings with client-side filtering by location, price, or description ([pages/index.js](pages/index.js))
+- Individual property detail pages (`/Properties/[id]`)
+- Blog with a featured post carousel and category listing (`/Blog`, `/Post/[id]`)
+- About, Service, and Contact pages, with the contact form sending mail via EmailJS
+- SEO metadata per page plus auto-generated `sitemap.xml` / `robots.txt` on every build ([next-sitemap.js](next-sitemap.js))
+
+### Admin dashboard
+- Simple login gate (`/Admin`) backed by a MongoDB `Admin` collection
+- Overview stats (post count, property count) at `/Dashboard`
+- Create, edit, and delete blog posts using a TipTap rich-text editor, with SEO title/meta/alt fields
+- Create, edit, and delete property listings (price, location, description, type, and three images)
+- Direct-to-Cloudinary image uploads for both posts and property photos
+
+## Tech stack
+
+| Layer | Tools |
+|---|---|
+| Framework | [Next.js 12](https://nextjs.org/) (Pages Router), React 18 |
+| Database | MongoDB via [Mongoose](https://mongoosejs.com/) |
+| Media storage | [Cloudinary](https://cloudinary.com/) (unsigned upload), [Multer](https://github.com/expressjs/multer) |
+| Rich text | [TipTap](https://tiptap.dev/) |
+| Email | [EmailJS](https://www.emailjs.com/) |
+| UI/animation | Framer Motion, AOS, Swiper, SweetAlert2, React Icons |
+| SEO | [next-sitemap](https://github.com/iamvishnusankar/next-sitemap) |
+| Tooling | ESLint (`eslint-config-next`), pnpm |
+
+## Project structure
+
+```
+pages/
+  index.js               # Home page — listings + blog preview
+  Properties.jsx          Properties/[id]/index.jsx   # Property listing & detail
+  Blog.jsx                 Post/[id]/index.jsx         # Blog listing & detail
+  About.jsx  Service.jsx  Contact.jsx
+  Admin.jsx               # Admin login
+  Dashboard.jsx           # Admin dashboard shell
+  api/
+    login.js  adminLogin.js  createAdmin.js
+    properties/  posts/       # REST-style CRUD endpoints
+    createProperty.js  editProperty.js  deleteProperty.js
+    createPost.js      editPost.js      deletePost.js
+    upload.js  uploadPropertyImages.js
+components/               # Shared UI (cards, header/footer, dashboard widgets, TipTap editor, etc.)
+models/                   # Mongoose schemas: Property, Post, Admin
+utils/connectMongo.js     # Mongo connection helper
+public/                   # Static assets & property/blog images
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Getting started
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+### Prerequisites
+- Node.js 16+ and [pnpm](https://pnpm.io/)
+- A MongoDB connection string (e.g. from MongoDB Atlas)
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+### Setup
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+```bash
+pnpm install
+```
 
-## Learn More
+Create a `.env` file in the project root:
 
-To learn more about Next.js, take a look at the following resources:
+```env
+MONGO_URI=your-mongodb-connection-string
+API_URL=http://localhost:3000
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+> Cloudinary uploads use a hardcoded cloud name and unsigned upload preset in [components/Overview.jsx](components/Overview.jsx) — update these to point at your own Cloudinary account before deploying.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Run the dev server:
 
-## Deploy on Vercel
+```bash
+pnpm dev
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Open [http://localhost:3000](http://localhost:3000).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Build
+
+```bash
+pnpm build   # also runs `next-sitemap` via the postbuild script
+pnpm start
+```
+
+## API routes
+
+| Route | Method | Purpose |
+|---|---|---|
+| `/api/login`, `/api/adminLogin` | POST | Admin authentication |
+| `/api/createAdmin` | POST | Create an admin account |
+| `/api/properties`, `/api/properties/[id]` | GET | List / fetch a property |
+| `/api/createProperty`, `/api/editProperty`, `/api/deleteProperty` | POST | Manage properties |
+| `/api/posts`, `/api/posts/[id]` | GET | List / fetch a blog post |
+| `/api/createPost`, `/api/editPost`, `/api/deletePost` | POST | Manage blog posts |
+| `/api/upload`, `/api/uploadPropertyImages` | POST | Server-side upload handling (Multer) |
+
+## Deployment
+
+Deployed for production on [Vercel](https://vercel.com/). Set `MONGO_URI` and `API_URL` as environment variables in the Vercel project settings — `next-sitemap` will regenerate the sitemap on every build using the `siteUrl` configured in [next-sitemap.js](next-sitemap.js).
+
+## License
+
+ISC
