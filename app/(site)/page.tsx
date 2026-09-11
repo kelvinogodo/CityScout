@@ -1,10 +1,17 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { HeroCarousel } from "@/components/site/hero-carousel";
 import { PropertyCard } from "@/components/site/property-card";
 import { PostCard } from "@/components/site/post-card";
 import { Button } from "@/components/ui/button";
 import { getProperties } from "@/lib/data/properties";
 import { getPosts } from "@/lib/data/posts";
+
+export const metadata: Metadata = {
+  title: { absolute: "Property Agents in Abakaliki" },
+  description:
+    "City Scout Realtors helps you find properties for sale in Ebonyi State easily.",
+};
 
 export default async function HomePage() {
   const [properties, posts] = await Promise.all([

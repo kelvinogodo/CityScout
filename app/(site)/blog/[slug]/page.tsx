@@ -19,6 +19,12 @@ export async function generateMetadata({
   return {
     title: post.seo_title || post.title,
     description: post.meta,
+    openGraph: {
+      title: post.seo_title || post.title,
+      description: post.meta,
+      images: [post.image],
+      type: "article",
+    },
   };
 }
 

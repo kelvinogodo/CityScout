@@ -22,6 +22,11 @@ export async function generateMetadata({
   return {
     title: `${property.location} — ${formatPrice(property.price)}`,
     description: property.description,
+    openGraph: {
+      title: `${property.location} — ${formatPrice(property.price)}`,
+      description: property.description,
+      images: [property.front_view_image],
+    },
   };
 }
 
