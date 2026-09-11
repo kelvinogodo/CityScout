@@ -1,66 +1,69 @@
 # CityScout Realtors
 
-A full-stack real estate website for **CityScout Realtors**, a property agency operating in Abakaliki, Ebonyi State, Nigeria. Visitors can browse and filter property listings and read agency blog posts, while a password-protected admin dashboard lets staff manage all listings and posts without touching code.
+A full-stack real estate website for **CityScout Realtors**, a property agency operating in Abakaliki, Ebonyi State, Nigeria. Visitors can browse and filter property listings and read agency blog posts, while a Supabase-authenticated admin dashboard lets staff manage all listings and posts without touching code.
 
 Live domain: [cityscoutrealtors.com](https://cityscoutrealtors.com)
 
 ## Features
 
 ### Public site
-- Landing page with hero/search section and featured properties
-- Property listings with client-side filtering by location, price, or description ([pages/index.js](pages/index.js))
-- Individual property detail pages (`/Properties/[id]`)
-- Blog with a featured post carousel and category listing (`/Blog`, `/Post/[id]`)
+- Landing page with a hero carousel and featured properties/posts
+- Property listings with real query-param search/filtering by location, type, and price range (`/properties?location=&type=&minPrice=&maxPrice=`)
+- Slug-based property and blog post detail pages, each with per-page SEO metadata and Open Graph images
 - About, Service, and Contact pages, with the contact form sending mail via EmailJS
-- SEO metadata per page plus auto-generated `sitemap.xml` / `robots.txt` on every build ([next-sitemap.js](next-sitemap.js))
+- Native `sitemap.xml` / `robots.txt` (Next.js Metadata Routes) covering every property and post
 
-### Admin dashboard
-- Simple login gate (`/Admin`) backed by a MongoDB `Admin` collection
-- Overview stats (post count, property count) at `/Dashboard`
+### Admin dashboard (`/admin`)
+- Supabase Auth (email + password) — accounts are provisioned directly in the Supabase dashboard; there is no public sign-up
+- Overview stats (property/post counts)
+- Create, edit, and delete property listings, with images uploaded to Supabase Storage
 - Create, edit, and delete blog posts using a TipTap rich-text editor, with SEO title/meta/alt fields
-- Create, edit, and delete property listings (price, location, description, type, and three images)
-- Direct-to-Cloudinary image uploads for both posts and property photos
+- Every mutation runs as a Server Action that independently verifies the session server-side (not just a route-level redirect)
 
 ## Tech stack
 
 | Layer | Tools |
 |---|---|
-| Framework | [Next.js 12](https://nextjs.org/) (Pages Router), React 18 |
-| Database | MongoDB via [Mongoose](https://mongoosejs.com/) |
-| Media storage | [Cloudinary](https://cloudinary.com/) (unsigned upload), [Multer](https://github.com/expressjs/multer) |
+| Framework | [Next.js 16](https://nextjs.org/) (App Router, Turbopack), React 19 |
+| Language | TypeScript |
+| Database & Auth | [Supabase](https://supabase.com/) (Postgres, Row Level Security, Auth) |
+| Storage | Supabase Storage |
+| Styling | Tailwind CSS, hand-rolled shadcn-style UI primitives (Radix + `class-variance-authority`) |
 | Rich text | [TipTap](https://tiptap.dev/) |
+| Validation | [Zod](https://zod.dev/) |
 | Email | [EmailJS](https://www.emailjs.com/) |
-| UI/animation | Framer Motion, AOS, Swiper, SweetAlert2, React Icons |
-| SEO | [next-sitemap](https://github.com/iamvishnusankar/next-sitemap) |
-| Tooling | ESLint (`eslint-config-next`), pnpm |
+| Testing | [Vitest](https://vitest.dev/), React Testing Library |
+| CI | GitHub Actions |
 
 ## Project structure
 
 ```
-pages/
-  index.js               # Home page — listings + blog preview
-  Properties.jsx          Properties/[id]/index.jsx   # Property listing & detail
-  Blog.jsx                 Post/[id]/index.jsx         # Blog listing & detail
-  About.jsx  Service.jsx  Contact.jsx
-  Admin.jsx               # Admin login
-  Dashboard.jsx           # Admin dashboard shell
-  api/
-    login.js  adminLogin.js  createAdmin.js
-    properties/  posts/       # REST-style CRUD endpoints
-    createProperty.js  editProperty.js  deleteProperty.js
-    createPost.js      editPost.js      deletePost.js
-    upload.js  uploadPropertyImages.js
-components/               # Shared UI (cards, header/footer, dashboard widgets, TipTap editor, etc.)
-models/                   # Mongoose schemas: Property, Post, Admin
-utils/connectMongo.js     # Mongo connection helper
-public/                   # Static assets & property/blog images
+src/
+  app/
+    (site)/               # public route group: home, properties, blog, about, service, contact
+    admin/
+      login/               # Supabase Auth login (Server Action)
+      (dashboard)/         # sidebar-shelled admin pages: overview, properties, posts
+    sitemap.ts  robots.ts   # native SEO metadata routes
+  components/
+    ui/                   # shadcn-style primitives (Button, Input, Textarea, Label, Toast)
+    site/                 # public-site components (Header, Footer, PropertyCard, etc.)
+    admin/                # admin-only components (forms, TipTap editor, sidebar, delete button)
+  lib/
+    data/                 # Supabase read queries (properties.ts, posts.ts)
+    validations/          # Zod schemas for forms
+    supabase/             # browser/server/middleware Supabase clients, auth guard, Database types
+    site-config.ts        # shared site name/description/URL
+  proxy.ts                # Next.js 16's middleware.ts replacement: legacy-URL redirects + admin auth gating
+supabase/
+  migrations/0001_init.sql # Postgres schema, RLS policies, Storage buckets
 ```
 
 ## Getting started
 
 ### Prerequisites
-- Node.js 16+ and [pnpm](https://pnpm.io/)
-- A MongoDB connection string (e.g. from MongoDB Atlas)
+- Node.js 20.9+ and [pnpm](https://pnpm.io/)
+- A [Supabase](https://supabase.com/) project
 
 ### Setup
 
@@ -68,14 +71,19 @@ public/                   # Static assets & property/blog images
 pnpm install
 ```
 
-Create a `.env` file in the project root:
+Create a Supabase project, then run `supabase/migrations/0001_init.sql` in its SQL Editor (Dashboard → SQL Editor → New query → paste → Run). This creates the `properties` and `posts` tables with Row Level Security plus two public Storage buckets for their images.
+
+Create an admin account under Authentication → Users → Add user (toggle "Auto Confirm User" on) — there's no public sign-up route by design.
+
+Create a `.env.local` file in the project root with your project's API keys (Project Settings → API Keys):
 
 ```env
-MONGO_URI=your-mongodb-connection-string
-API_URL=http://localhost:3000
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
+SUPABASE_SECRET_KEY=sb_secret_...
 ```
 
-> Cloudinary uploads use a hardcoded cloud name and unsigned upload preset in [components/Overview.jsx](components/Overview.jsx) — update these to point at your own Cloudinary account before deploying.
+> `SUPABASE_SECRET_KEY` bypasses Row Level Security — keep it server-side only, never prefix it with `NEXT_PUBLIC_`.
 
 Run the dev server:
 
@@ -83,30 +91,20 @@ Run the dev server:
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000) (Next.js picks the next free port if 3000 is taken — check the terminal output).
 
-### Build
+### Other scripts
 
 ```bash
-pnpm build   # also runs `next-sitemap` via the postbuild script
-pnpm start
+pnpm lint        # ESLint
+pnpm typecheck   # tsc --noEmit
+pnpm test        # Vitest
+pnpm build       # production build
 ```
-
-## API routes
-
-| Route | Method | Purpose |
-|---|---|---|
-| `/api/login`, `/api/adminLogin` | POST | Admin authentication |
-| `/api/createAdmin` | POST | Create an admin account |
-| `/api/properties`, `/api/properties/[id]` | GET | List / fetch a property |
-| `/api/createProperty`, `/api/editProperty`, `/api/deleteProperty` | POST | Manage properties |
-| `/api/posts`, `/api/posts/[id]` | GET | List / fetch a blog post |
-| `/api/createPost`, `/api/editPost`, `/api/deletePost` | POST | Manage blog posts |
-| `/api/upload`, `/api/uploadPropertyImages` | POST | Server-side upload handling (Multer) |
 
 ## Deployment
 
-Deployed for production on [Vercel](https://vercel.com/). Set `MONGO_URI` and `API_URL` as environment variables in the Vercel project settings — `next-sitemap` will regenerate the sitemap on every build using the `siteUrl` configured in [next-sitemap.js](next-sitemap.js).
+Deployed for production on [Vercel](https://vercel.com/). Set the three Supabase environment variables above in the Vercel project settings.
 
 ## License
 

@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Design tokens carried forward from the old site's dark header/nav (#0D0D0D / #292929),
+  paired with a light content area (more legible for property photography) and a warm
+  accent for CTAs, in line with typical real-estate branding.
+*/
+:root {
+  --background: 0 0% 100%;
+  --foreground: 0 0% 7%;
+  --surface: 0 0% 98%;
+  --border: 0 0% 88%;
+  --muted: 0 0% 95%;
+  --muted-foreground: 0 0% 40%;
+  --primary: 0 0% 5%;
+  --primary-foreground: 0 0% 100%;
+  --accent: 38 92% 40%;
+  --accent-foreground: 0 0% 7%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: 0 0% 7%;
+  --foreground: 0 0% 96%;
+  --surface: 0 0% 12%;
+  --border: 0 0% 20%;
+  --muted: 0 0% 16%;
+  --muted-foreground: 0 0% 65%;
+  --primary: 0 0% 96%;
+  --primary-foreground: 0 0% 7%;
+  --accent: 38 92% 40%;
+  --accent-foreground: 0 0% 7%;
+  --destructive: 0 63% 45%;
+  --destructive-foreground: 0 0% 100%;
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+body {
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+}

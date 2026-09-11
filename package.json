@@ -1,52 +1,75 @@
 {
-  "name": "kelvin",
-  "version": "0.1.0",
+  "name": "cityscout-realtors",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "postbuild":"next-sitemap"
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
   },
   "dependencies": {
     "@emailjs/browser": "^3.7.0",
-    "@tiptap/extension-link": "2.0.0-beta.195",
-    "@tiptap/extension-underline": "2.0.0-beta.194",
-    "@tiptap/react": "2.0.0-beta.194",
-    "@tiptap/starter-kit": "2.0.0-beta.194",
+    "@radix-ui/react-label": "^2.1.15",
+    "@radix-ui/react-slot": "^1.3.3",
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.116.0",
+    "@tiptap/extension-link": "3.31.3",
+    "@tiptap/extension-underline": "3.31.3",
+    "@tiptap/react": "3.31.3",
+    "@tiptap/starter-kit": "3.31.3",
     "aos": "^2.3.4",
     "axios": "^1.0.0",
-    "framer-motion": "^7.2.0",
-    "html-react-parser": "^3.0.4",
-    "mongoose": "^6.5.2",
-    "multer": "1.4.5-lts.1",
-    "next": "12.2.5",
-    "next-connect": "^0.13.0",
-    "next-sitemap": "^3.1.29",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^13.2.0",
+    "html-react-parser": "^6.1.7",
+    "lucide-react": "^1.44.0",
+    "next": "16.3.4",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
     "react-icons": "^4.4.0",
+    "sonner": "^2.0.8",
     "sweetalert2": "^11.4.29",
-    "swiper": "^8.3.2"
+    "swiper": "^8.3.2",
+    "tailwind-merge": "^3.6.0",
+    "zod": "^4.6.1"
   },
   "devDependencies": {
-    "eslint": "8.22.0",
-    "eslint-config-next": "12.2.5"
+    "@tailwindcss/typography": "^0.5.20",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.7",
+    "@types/node": "^22.20.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "autoprefixer": "^10.5.6",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.3.4",
+    "happy-dom": "^20.14.3",
+    "postcss": "^8.5.28",
+    "tailwindcss": "^3",
+    "typescript": "^6.0.3",
+    "vitest": "^5.0.0"
   },
-  "description": "This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).",
-  "main": "app.js",
+  "description": "Real estate agency website for CityScout Realtors, built with Next.js, TypeScript, Tailwind CSS, and Supabase.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kelvinogodo/cityScoutRealtors.git"
+    "url": "git+https://github.com/kelvinogodo/CityScout.git"
   },
   "keywords": [
-    "''"
+    "nextjs",
+    "typescript",
+    "supabase",
+    "real-estate"
   ],
-  "author": "kelvin",
+  "author": "Kelvin Ogodo",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/kelvinogodo/cityScoutRealtors/issues"
+    "url": "https://github.com/kelvinogodo/CityScout/issues"
   },
-  "homepage": "https://github.com/kelvinogodo/cityScoutRealtors#readme"
+  "homepage": "https://github.com/kelvinogodo/CityScout#readme"
 }
