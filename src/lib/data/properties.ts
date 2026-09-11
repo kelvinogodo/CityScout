@@ -1,20 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
+import type { PropertyRow } from "@/lib/supabase/database.types";
 
-export type PropertyType = "house" | "land";
-
-export type Property = {
-  id: string;
-  slug: string;
-  description: string;
-  location: string;
-  price: number;
-  type: PropertyType;
-  front_view_image: string;
-  side_view_image: string;
-  back_view_image: string;
-  created_at: string;
-  updated_at: string;
-};
+export type Property = PropertyRow;
+export type PropertyType = PropertyRow["type"];
 
 export type PropertyFilters = {
   location?: string;

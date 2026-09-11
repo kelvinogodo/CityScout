@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { requireUser } from "@/lib/supabase/auth";
 import { createClient } from "@/lib/supabase/server";
 import { uploadImage } from "@/lib/supabase/storage";
+import type { PropertyUpdate } from "@/lib/supabase/database.types";
 import { slugify } from "@/lib/utils";
 import {
   createPropertySchema,
@@ -84,7 +85,7 @@ export async function updateProperty(
   const { frontViewImage, sideViewImage, backViewImage, ...rest } =
     parsed.data;
 
-  const updates: Record<string, unknown> = { ...rest };
+  const updates: PropertyUpdate = { ...rest };
   if (frontViewImage) {
     updates.front_view_image = await uploadImage(
       "property-images",

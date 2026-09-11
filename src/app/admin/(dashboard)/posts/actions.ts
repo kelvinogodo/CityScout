@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { requireUser } from "@/lib/supabase/auth";
 import { createClient } from "@/lib/supabase/server";
 import { uploadImage } from "@/lib/supabase/storage";
+import type { PostUpdate } from "@/lib/supabase/database.types";
 import { slugify } from "@/lib/utils";
 import { createPostSchema, updatePostSchema } from "@/lib/validations/post";
 
@@ -70,7 +71,7 @@ export async function updatePost(
 
   const { image, seoTitle, ...rest } = parsed.data;
 
-  const updates: Record<string, unknown> = { ...rest, seo_title: seoTitle };
+  const updates: PostUpdate = { ...rest, seo_title: seoTitle };
   if (image) {
     updates.image = await uploadImage("post-images", image);
   }

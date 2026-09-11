@@ -1,21 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
+import type { PostRow } from "@/lib/supabase/database.types";
 
-export type PostCategory = "normal" | "featured";
-
-export type Post = {
-  id: string;
-  slug: string;
-  title: string;
-  body: string;
-  image: string;
-  author: string;
-  category: PostCategory;
-  alt: string;
-  seo_title: string;
-  meta: string;
-  created_at: string;
-  updated_at: string;
-};
+export type Post = PostRow;
+export type PostCategory = PostRow["category"];
 
 export type PostFilters = {
   category?: PostCategory;

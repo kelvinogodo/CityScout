@@ -38,24 +38,25 @@ Live domain: [cityscoutrealtors.com](https://cityscoutrealtors.com)
 ## Project structure
 
 ```
-app/
-  (site)/                 # public route group: home, properties, blog, about, service, contact
-  admin/
-    login/                # Supabase Auth login (Server Action)
-    (dashboard)/          # sidebar-shelled admin pages: overview, properties, posts
-  sitemap.ts  robots.ts    # native SEO metadata routes
-components/
-  ui/                     # shadcn-style primitives (Button, Input, Textarea, Label, Toast)
-  site/                   # public-site components (Header, Footer, PropertyCard, etc.)
-  admin/                  # admin-only components (forms, TipTap editor, sidebar, delete button)
-lib/
-  data/                   # Supabase read queries (properties.ts, posts.ts)
-  validations/            # Zod schemas for forms
-  supabase/               # browser/server/middleware Supabase clients + auth guard
-  site-config.ts          # shared site name/description/URL
+src/
+  app/
+    (site)/               # public route group: home, properties, blog, about, service, contact
+    admin/
+      login/               # Supabase Auth login (Server Action)
+      (dashboard)/         # sidebar-shelled admin pages: overview, properties, posts
+    sitemap.ts  robots.ts   # native SEO metadata routes
+  components/
+    ui/                   # shadcn-style primitives (Button, Input, Textarea, Label, Toast)
+    site/                 # public-site components (Header, Footer, PropertyCard, etc.)
+    admin/                # admin-only components (forms, TipTap editor, sidebar, delete button)
+  lib/
+    data/                 # Supabase read queries (properties.ts, posts.ts)
+    validations/          # Zod schemas for forms
+    supabase/             # browser/server/middleware Supabase clients, auth guard, Database types
+    site-config.ts        # shared site name/description/URL
+  proxy.ts                # Next.js 16's middleware.ts replacement: legacy-URL redirects + admin auth gating
 supabase/
   migrations/0001_init.sql # Postgres schema, RLS policies, Storage buckets
-proxy.ts                  # Next.js 16's middleware.ts replacement: legacy-URL redirects + admin auth gating
 ```
 
 ## Getting started
