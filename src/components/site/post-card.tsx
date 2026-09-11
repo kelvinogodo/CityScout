@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Star } from "lucide-react";
 import type { Post } from "@/lib/data/posts";
 
 export function PostCard({ post }: { post: Post }) {
@@ -16,11 +17,14 @@ export function PostCard({ post }: { post: Post }) {
           sizes="(min-width: 768px) 33vw, 100vw"
           className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
+        {post.category === "featured" && (
+          <span className="absolute left-3 top-3 flex items-center gap-1 rounded-full bg-accent px-2.5 py-1 text-xs font-medium text-accent-foreground">
+            <Star className="h-3.5 w-3.5 fill-current" />
+            Featured
+          </span>
+        )}
       </div>
       <div className="space-y-2 p-4">
-        <p className="text-xs font-medium uppercase tracking-wide text-accent">
-          {post.category}
-        </p>
         <h3 className="line-clamp-2 text-lg font-semibold">{post.title}</h3>
         <p className="text-sm text-muted-foreground">
           {post.author} ·{" "}

@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Plus, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DeleteButton } from "@/components/admin/delete-button";
-import { formatPrice } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 import { getProperties } from "@/lib/data/properties";
 import { deleteProperty } from "./actions";
 
@@ -34,8 +34,14 @@ export default async function AdminPropertiesPage() {
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
-            {properties.map((property) => (
-              <tr key={property.id}>
+            {properties.map((property, index) => (
+              <tr
+                key={property.id}
+                className={cn(
+                  "hover:bg-muted/60",
+                  index % 2 === 1 && "bg-muted/30",
+                )}
+              >
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-3">
                     <div className="relative h-12 w-16 shrink-0 overflow-hidden rounded">

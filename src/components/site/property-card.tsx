@@ -1,10 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
-import { MapPin } from "lucide-react";
+import { House, LandPlot, MapPin } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
 import type { Property } from "@/lib/data/properties";
 
+const TYPE_ICON = { house: House, land: LandPlot } as const;
+
 export function PropertyCard({ property }: { property: Property }) {
+  const TypeIcon = TYPE_ICON[property.type];
+
   return (
     <Link
       href={`/properties/${property.slug}`}
@@ -18,7 +22,8 @@ export function PropertyCard({ property }: { property: Property }) {
           sizes="(min-width: 768px) 33vw, 100vw"
           className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
-        <span className="absolute left-3 top-3 rounded-full bg-accent px-2.5 py-1 text-xs font-medium capitalize text-accent-foreground">
+        <span className="absolute left-3 top-3 flex items-center gap-1 rounded-full bg-accent px-2.5 py-1 text-xs font-medium capitalize text-accent-foreground">
+          <TypeIcon className="h-3.5 w-3.5" />
           {property.type}
         </span>
       </div>

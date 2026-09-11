@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Plus, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DeleteButton } from "@/components/admin/delete-button";
+import { cn } from "@/lib/utils";
 import { getPosts } from "@/lib/data/posts";
 import { deletePost } from "./actions";
 
@@ -32,8 +33,14 @@ export default async function AdminPostsPage() {
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
-            {posts.map((post) => (
-              <tr key={post.id}>
+            {posts.map((post, index) => (
+              <tr
+                key={post.id}
+                className={cn(
+                  "hover:bg-muted/60",
+                  index % 2 === 1 && "bg-muted/30",
+                )}
+              >
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-3">
                     <div className="relative h-12 w-16 shrink-0 overflow-hidden rounded">

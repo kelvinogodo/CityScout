@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import parse from "html-react-parser";
+import { Star } from "lucide-react";
 import { getPostBySlug } from "@/lib/data/posts";
 
 type Params = Promise<{ slug: string }>;
@@ -36,9 +37,12 @@ export default async function PostDetailPage({ params }: { params: Params }) {
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
-      <p className="text-xs font-medium uppercase tracking-wide text-accent">
-        {post.category}
-      </p>
+      {post.category === "featured" && (
+        <span className="inline-flex items-center gap-1 rounded-full bg-accent px-3 py-1 text-xs font-medium text-accent-foreground">
+          <Star className="h-3.5 w-3.5 fill-current" />
+          Featured
+        </span>
+      )}
       <h1 className="mt-2 text-3xl font-semibold sm:text-4xl">{post.title}</h1>
       <p className="mt-2 text-sm text-muted-foreground">
         {post.author} ·{" "}

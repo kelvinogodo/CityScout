@@ -1,9 +1,9 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { HeroCarousel } from "@/components/site/hero-carousel";
+import { HeroSearch } from "@/components/site/hero-search";
 import { PropertyCard } from "@/components/site/property-card";
 import { PostCard } from "@/components/site/post-card";
-import { Button } from "@/components/ui/button";
 import { getProperties } from "@/lib/data/properties";
 import { getPosts } from "@/lib/data/posts";
 
@@ -31,9 +31,7 @@ export default async function HomePage() {
             CityScout Realtors connects you with verified, worthy properties
             for sale in Ebonyi State.
           </p>
-          <Button asChild size="lg" variant="accent" className="mt-6">
-            <Link href="/properties">Explore properties</Link>
-          </Button>
+          <HeroSearch />
         </div>
       </section>
 

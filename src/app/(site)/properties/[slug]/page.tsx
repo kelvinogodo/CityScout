@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { MapPin } from "lucide-react";
+import { House, LandPlot, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/utils";
 import { getPropertyBySlug } from "@/lib/data/properties";
@@ -46,6 +46,8 @@ export default async function PropertyDetailPage({
     property.back_view_image,
   ];
 
+  const TypeIcon = property.type === "house" ? House : LandPlot;
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
       <div className="grid gap-2 sm:grid-cols-3">
@@ -79,7 +81,8 @@ export default async function PropertyDetailPage({
 
       <div className="mt-8 grid gap-8 lg:grid-cols-3">
         <div className="lg:col-span-2">
-          <span className="inline-block rounded-full bg-accent px-3 py-1 text-xs font-medium capitalize text-accent-foreground">
+          <span className="inline-flex items-center gap-1 rounded-full bg-accent px-3 py-1 text-xs font-medium capitalize text-accent-foreground">
+            <TypeIcon className="h-3.5 w-3.5" />
             {property.type}
           </span>
           <h1 className="mt-3 text-3xl font-semibold">
