@@ -7,7 +7,11 @@ Live domain: [cityscoutrealtors.com](https://cityscoutrealtors.com)
 ## Features
 
 ### Public site
-- Landing page with a hero carousel and featured properties/posts
+- Landing page with a Nigerian-imagery hero carousel, search bar, featured properties/posts and a "how it works" section
+- WhatsApp and click-to-call on every page (floating button, property pages with a prefilled enquiry, contact page)
+- Listings carry the details local buyers ask about: sale/rent, bedrooms, bathrooms, land size, title document, negotiable price; paginated, filterable results
+- Draft/published status for listings and posts; illustrative content is flagged and labelled as "Sample"
+- Privacy policy and terms pages, structured data (RealEstateAgent, BlogPosting), generated social preview image, Vercel Analytics
 - Property listings with real query-param search/filtering by location, type, and price range (`/properties?location=&type=&minPrice=&maxPrice=`)
 - Slug-based property and blog post detail pages, each with per-page SEO metadata and Open Graph images
 - About, Service, and Contact pages, with the contact form sending mail via EmailJS
@@ -62,7 +66,7 @@ supabase/
 ## Getting started
 
 ### Prerequisites
-- Node.js 20.9+ and [pnpm](https://pnpm.io/)
+- Node.js 22 (see `.nvmrc`) and [pnpm](https://pnpm.io/)
 - A [Supabase](https://supabase.com/) project
 
 ### Setup
@@ -71,7 +75,18 @@ supabase/
 pnpm install
 ```
 
-Create a Supabase project, then run `supabase/migrations/0001_init.sql` in its SQL Editor (Dashboard → SQL Editor → New query → paste → Run). This creates the `properties` and `posts` tables with Row Level Security plus two public Storage buckets for their images.
+Create a Supabase project, then run each file in `supabase/migrations/` **in order** in its SQL Editor (Dashboard → SQL Editor → New query → paste → Run):
+
+1. `0001_init.sql` — `properties` and `posts` tables, Row Level Security, and two public Storage buckets for images.
+2. `0002_sample_flag.sql` — `is_sample` flag so illustrative content can be labelled and removed.
+3. `0003_listing_details_and_publishing.sql` — bedrooms, bathrooms, land size, title document, sale/rent status, negotiable price, and draft/published status (drafts are hidden from the public by RLS).
+
+Optionally add clearly-labelled sample listings and posts so a fresh site isn't empty, and remove them later:
+
+```bash
+pnpm seed:sample     # add sample content (use `node scripts/seed-sample.mjs --dry-run` to preview)
+pnpm clear:sample    # remove every sample row and its images
+```
 
 Create an admin account under Authentication → Users → Add user (toggle "Auto Confirm User" on) — there's no public sign-up route by design.
 

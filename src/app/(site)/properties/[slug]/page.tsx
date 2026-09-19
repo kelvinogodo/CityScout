@@ -2,10 +2,15 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { House, LandPlot, MapPin } from "lucide-react";
+import { House, LandPlot, MapPin, MessageCircle, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/utils";
 import { getPropertyBySlug } from "@/lib/data/properties";
+import {
+  LISTING_STATUS_LABELS,
+  TITLE_DOCUMENT_LABELS,
+} from "@/lib/listing-labels";
+import { siteConfig, whatsappLink } from "@/lib/site-config";
 
 type Params = Promise<{ slug: string }>;
 
@@ -47,6 +52,22 @@ export default async function PropertyDetailPage({
   ];
 
   const TypeIcon = property.type === "house" ? House : LandPlot;
+  const isRent = property.listing_status === "for_rent";
+
+  const facts: [string, string][] = [
+    ["Status", LISTING_STATUS_LABELS[property.listing_status ?? "for_sale"]],
+    ["Type", property.type === "house" ? "House" : "Land"],
+  ];
+  if (property.bedrooms != null) facts.push(["Bedrooms", String(property.bedrooms)]);
+  if (property.bathrooms != null) facts.push(["Bathrooms", String(property.bathrooms)]);
+  if (property.land_size_sqm != null) {
+    facts.push(["Land size", `${property.land_size_sqm} sqm`]);
+  }
+  if (property.title_document) {
+    facts.push(["Title document", TITLE_DOCUMENT_LABELS[property.title_document]]);
+  }
+
+  const enquiry = `Hello CityScout Realtors, I'm interested in the property at ${property.location} (${formatPrice(property.price)}). ${siteConfig.url}/properties/${property.slug}`;
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
@@ -93,23 +114,60 @@ export default async function PropertyDetailPage({
           </span>
           <h1 className="mt-3 text-3xl font-semibold">
             {formatPrice(property.price)}
+            {isRent && (
+              <span className="text-lg font-normal text-muted-foreground">
+                {" "}
+                / year
+              </span>
+            )}
           </h1>
+          {property.price_negotiable && (
+            <p className="mt-1 text-sm font-medium text-accent">
+              Price negotiable
+            </p>
+          )}
           <p className="mt-2 flex items-center gap-1 text-muted-foreground">
             <MapPin className="h-4 w-4" />
             {property.location}
           </p>
+
+          <dl className="mt-6 grid gap-x-8 gap-y-3 rounded-lg border border-border bg-surface p-5 text-sm sm:grid-cols-2">
+            {facts.map(([label, value]) => (
+              <div key={label} className="flex justify-between gap-4">
+                <dt className="text-muted-foreground">{label}</dt>
+                <dd className="text-right font-medium">{value}</dd>
+              </div>
+            ))}
+          </dl>
+
           <p className="mt-6 whitespace-pre-line leading-relaxed text-foreground">
             {property.description}
           </p>
         </div>
 
-        <div className="h-fit rounded-lg border border-border bg-surface p-6">
+        <div className="h-fit space-y-3 rounded-lg border border-border bg-surface p-6">
           <h2 className="text-lg font-semibold">Interested in this property?</h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Reach out and our team will get back to you with more details.
+          <p className="text-sm text-muted-foreground">
+            Message us on WhatsApp for the quickest response, or call to arrange
+            an inspection.
           </p>
-          <Button asChild className="mt-4 w-full">
-            <Link href="/contact">Contact us</Link>
+          <Button
+            asChild
+            className="w-full gap-2 bg-[#25D366] text-black hover:bg-[#25D366]/90"
+          >
+            <a href={whatsappLink(enquiry)} target="_blank" rel="noreferrer">
+              <MessageCircle className="h-4 w-4" />
+              Chat on WhatsApp
+            </a>
+          </Button>
+          <Button asChild variant="outline" className="w-full gap-2">
+            <a href={`tel:${siteConfig.phone}`}>
+              <Phone className="h-4 w-4" />
+              Call {siteConfig.phoneDisplay}
+            </a>
+          </Button>
+          <Button asChild variant="ghost" className="w-full">
+            <Link href="/contact">Send a message</Link>
           </Button>
         </div>
       </div>

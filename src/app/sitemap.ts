@@ -37,6 +37,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly",
       priority: 0.5,
     },
+    {
+      url: `${siteConfig.url}/privacy`,
+      changeFrequency: "yearly",
+      priority: 0.2,
+    },
+    {
+      url: `${siteConfig.url}/terms`,
+      changeFrequency: "yearly",
+      priority: 0.2,
+    },
   ];
 
   const propertyRoutes: MetadataRoute.Sitemap = (properties ?? []).map(

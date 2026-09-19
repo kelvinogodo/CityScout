@@ -15,7 +15,91 @@ const baseFields = {
   location: "Abakaliki, Ebonyi State",
   price: "5000000",
   type: "house",
+  listingStatus: "for_sale",
+  bedrooms: "",
+  bathrooms: "",
+  landSizeSqm: "",
+  titleDocument: "",
+  priceNegotiable: null,
+  isPublished: "on",
 };
+
+describe("listing detail fields", () => {
+  const images = {
+    frontViewImage: makeFile(),
+    sideViewImage: makeFile(),
+    backViewImage: makeFile(),
+  };
+
+  it("treats blank optional fields as not provided", () => {
+    const result = createPropertySchema.safeParse({ ...baseFields, ...images });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.bedrooms).toBeUndefined();
+      expect(result.data.landSizeSqm).toBeUndefined();
+      expect(result.data.titleDocument).toBeUndefined();
+      expect(result.data.priceNegotiable).toBe(false);
+    }
+  });
+
+  it("parses numeric details from form strings", () => {
+    const result = createPropertySchema.safeParse({
+      ...baseFields,
+      ...images,
+      bedrooms: "4",
+      bathrooms: "3",
+      landSizeSqm: "648.5",
+      titleDocument: "c_of_o",
+      priceNegotiable: "on",
+    });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.bedrooms).toBe(4);
+      expect(result.data.landSizeSqm).toBe(648.5);
+      expect(result.data.titleDocument).toBe("c_of_o");
+      expect(result.data.priceNegotiable).toBe(true);
+    }
+  });
+
+  it("treats an unticked published checkbox as a draft", () => {
+    const result = createPropertySchema.safeParse({
+      ...baseFields,
+      ...images,
+      isPublished: null,
+    });
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.isPublished).toBe(false);
+  });
+
+  it("rejects an unknown title document", () => {
+    const result = createPropertySchema.safeParse({
+      ...baseFields,
+      ...images,
+      titleDocument: "receipt",
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("rejects negative bedrooms and a zero land size", () => {
+    expect(
+      createPropertySchema.safeParse({ ...baseFields, ...images, bedrooms: "-1" })
+        .success,
+    ).toBe(false);
+    expect(
+      createPropertySchema.safeParse({ ...baseFields, ...images, landSizeSqm: "0" })
+        .success,
+    ).toBe(false);
+  });
+
+  it("rejects an invalid listing status", () => {
+    const result = createPropertySchema.safeParse({
+      ...baseFields,
+      ...images,
+      listingStatus: "sold",
+    });
+    expect(result.success).toBe(false);
+  });
+});
 
 describe("createPropertySchema", () => {
   it("accepts valid input with three images", () => {

@@ -20,6 +20,7 @@ function readPostFormData(formData: FormData) {
     alt: formData.get("alt"),
     seoTitle: formData.get("seoTitle"),
     meta: formData.get("meta"),
+    isPublished: formData.get("isPublished"),
     image: formData.get("image"),
   };
 }
@@ -35,7 +36,7 @@ export async function createPost(
     return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   }
 
-  const { image, seoTitle, ...rest } = parsed.data;
+  const { image, seoTitle, isPublished, ...rest } = parsed.data;
   const imageUrl = await uploadImage("post-images", image);
 
   const supabase = await createClient();
@@ -46,14 +47,19 @@ export async function createPost(
     slug,
     image: imageUrl,
     seo_title: seoTitle,
+    is_published: isPublished,
   });
 
   if (error) {
-    return { error: "Failed to create post. Please try again." };
+    return {
+      error:
+        "Failed to create post. If this keeps happening, make sure the latest database migrations have been run.",
+    };
   }
 
   revalidatePath("/admin/posts");
   revalidatePath("/blog");
+  revalidatePath("/");
   redirect("/admin/posts");
 }
 
@@ -69,9 +75,13 @@ export async function updatePost(
     return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   }
 
-  const { image, seoTitle, ...rest } = parsed.data;
+  const { image, seoTitle, isPublished, ...rest } = parsed.data;
 
-  const updates: PostUpdate = { ...rest, seo_title: seoTitle };
+  const updates: PostUpdate = {
+    ...rest,
+    seo_title: seoTitle,
+    is_published: isPublished,
+  };
   if (image) {
     updates.image = await uploadImage("post-images", image);
   }
@@ -80,11 +90,15 @@ export async function updatePost(
   const { error } = await supabase.from("posts").update(updates).eq("id", id);
 
   if (error) {
-    return { error: "Failed to update post. Please try again." };
+    return {
+      error:
+        "Failed to update post. If this keeps happening, make sure the latest database migrations have been run.",
+    };
   }
 
   revalidatePath("/admin/posts");
   revalidatePath("/blog");
+  revalidatePath("/");
   redirect("/admin/posts");
 }
 

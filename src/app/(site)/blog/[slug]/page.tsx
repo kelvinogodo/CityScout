@@ -3,6 +3,8 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import parse from "html-react-parser";
 import { Star } from "lucide-react";
+import { JsonLd } from "@/components/json-ld";
+import { siteConfig } from "@/lib/site-config";
 import { getPostBySlug } from "@/lib/data/posts";
 
 type Params = Promise<{ slug: string }>;
@@ -37,6 +39,20 @@ export default async function PostDetailPage({ params }: { params: Params }) {
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          headline: post.title,
+          description: post.meta,
+          image: post.image,
+          datePublished: post.created_at,
+          dateModified: post.updated_at,
+          author: { "@type": "Organization", name: post.author },
+          publisher: { "@type": "Organization", name: siteConfig.name },
+          mainEntityOfPage: `${siteConfig.url}/blog/${post.slug}`,
+        }}
+      />
       {post.is_sample && (
         <p className="mb-4 rounded-md border border-border bg-muted px-3 py-2 text-sm text-muted-foreground">
           Sample article shown for illustration.

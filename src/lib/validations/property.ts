@@ -13,11 +13,47 @@ const optionalImage = z.preprocess(
   requiredImage.optional(),
 );
 
+const blankToUndefined = (value: unknown) =>
+  value === "" || value === null ? undefined : value;
+
+const optionalCount = z.preprocess(
+  blankToUndefined,
+  z.coerce.number().int("Must be a whole number").min(0).max(50).optional(),
+);
+
+const optionalSize = z.preprocess(
+  blankToUndefined,
+  z.coerce.number().positive("Size must be greater than 0").optional(),
+);
+
+export const TITLE_DOCUMENTS = [
+  "c_of_o",
+  "deed_of_assignment",
+  "survey_plan",
+  "governors_consent",
+  "other",
+] as const;
+
+const optionalTitle = z.preprocess(
+  blankToUndefined,
+  z.enum(TITLE_DOCUMENTS).optional(),
+);
+
+// HTML checkboxes submit "on" when ticked and are absent when not.
+const checkbox = z.preprocess((value) => value === "on" || value === true, z.boolean());
+
 const propertyFields = {
   description: z.string().trim().min(1, "Description is required"),
   location: z.string().trim().min(1, "Location is required"),
   price: z.coerce.number().min(0, "Price must be a positive number"),
   type: z.enum(["house", "land"]),
+  listingStatus: z.enum(["for_sale", "for_rent"]),
+  bedrooms: optionalCount,
+  bathrooms: optionalCount,
+  landSizeSqm: optionalSize,
+  titleDocument: optionalTitle,
+  priceNegotiable: checkbox,
+  isPublished: checkbox,
 };
 
 export const createPropertySchema = z.object({

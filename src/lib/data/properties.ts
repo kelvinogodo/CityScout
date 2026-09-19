@@ -3,23 +3,39 @@ import type { PropertyRow } from "@/lib/supabase/database.types";
 
 export type Property = PropertyRow;
 export type PropertyType = PropertyRow["type"];
+export type ListingStatus = PropertyRow["listing_status"];
 
 export type PropertyFilters = {
   location?: string;
   type?: PropertyType;
+  status?: ListingStatus;
   minPrice?: number;
   maxPrice?: number;
+  minBedrooms?: number;
   limit?: number;
 };
 
-export async function getProperties(
+export type Page<T> = {
+  items: T[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+};
+
+export async function getPropertiesPage(
   filters: PropertyFilters = {},
-): Promise<Property[]> {
+  page = 1,
+  pageSize = 9,
+): Promise<Page<Property>> {
   const supabase = await createClient();
+  const from = (page - 1) * pageSize;
+
   let query = supabase
     .from("properties")
-    .select("*")
-    .order("created_at", { ascending: false });
+    .select("*", { count: "exact" })
+    .order("created_at", { ascending: false })
+    .range(from, from + pageSize - 1);
 
   if (filters.location) {
     query = query.ilike("location", `%${filters.location}%`);
@@ -27,19 +43,37 @@ export async function getProperties(
   if (filters.type) {
     query = query.eq("type", filters.type);
   }
+  if (filters.status) {
+    query = query.eq("listing_status", filters.status);
+  }
   if (filters.minPrice !== undefined) {
     query = query.gte("price", filters.minPrice);
   }
   if (filters.maxPrice !== undefined) {
     query = query.lte("price", filters.maxPrice);
   }
-  if (filters.limit) {
-    query = query.limit(filters.limit);
+  if (filters.minBedrooms !== undefined) {
+    query = query.gte("bedrooms", filters.minBedrooms);
   }
 
-  const { data, error } = await query;
+  const { data, error, count } = await query;
   if (error) throw new Error(error.message);
-  return data ?? [];
+
+  const total = count ?? 0;
+  return {
+    items: data ?? [],
+    total,
+    page,
+    pageSize,
+    totalPages: Math.max(1, Math.ceil(total / pageSize)),
+  };
+}
+
+export async function getProperties(
+  filters: PropertyFilters = {},
+): Promise<Property[]> {
+  const { items } = await getPropertiesPage(filters, 1, filters.limit ?? 1000);
+  return items;
 }
 
 export async function getPropertyBySlug(

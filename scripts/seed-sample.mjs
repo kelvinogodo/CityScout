@@ -25,10 +25,13 @@ async function upload(bucket, relativePath) {
 }
 
 async function main() {
-  const { error: probe } = await supabase.from("properties").select("id, is_sample").limit(1);
+  const { error: probe } = await supabase
+    .from("properties")
+    .select("id, is_sample, is_published, bedrooms, listing_status")
+    .limit(1);
   if (probe) {
     console.error(
-      `Cannot read properties.is_sample (${probe.message}). Run supabase/migrations/0002_sample_flag.sql first.`,
+      `Database is missing columns (${probe.message}). Run supabase/migrations/0002_sample_flag.sql and 0003_listing_details_and_publishing.sql first.`,
     );
     process.exit(1);
   }
@@ -45,6 +48,12 @@ async function main() {
       location: p.location,
       price: p.price,
       type: p.type,
+      listing_status: p.listing_status,
+      bedrooms: p.bedrooms,
+      bathrooms: p.bathrooms,
+      land_size_sqm: p.land_size_sqm,
+      title_document: p.title_document,
+      price_negotiable: p.price_negotiable,
       front_view_image: front,
       side_view_image: side,
       back_view_image: back,
