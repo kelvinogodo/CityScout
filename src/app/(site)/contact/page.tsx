@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import {
   ArrowUpRight,
   AtSign,
@@ -12,7 +11,8 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { ContactForm } from "@/components/site/contact-form";
-import { Entrance, Reveal, RevealGroup, RevealItem } from "@/components/site/reveal";
+import { PageHero } from "@/components/site/page-hero";
+import { Reveal, RevealGroup, RevealItem } from "@/components/site/reveal";
 import { siteConfig, whatsappLink } from "@/lib/site-config";
 
 export const metadata: Metadata = {
@@ -61,35 +61,13 @@ const directionsHref =
 export default function ContactPage() {
   return (
     <>
-      <section className="relative overflow-hidden bg-black pb-32 pt-24 text-white sm:pb-40 sm:pt-32">
-        <Image
-          src="/images/hero/abuja-hillside.jpg"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover opacity-45"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/80" />
-        <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
-          <Entrance>
-            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[hsl(38_92%_55%)]">
-              Contact
-            </p>
-          </Entrance>
-          <Entrance delay={0.1}>
-            <h1 className="mt-4 max-w-2xl text-4xl font-semibold leading-[1.1] sm:text-6xl">
-              Let&apos;s talk about your next property
-            </h1>
-          </Entrance>
-          <Entrance delay={0.2}>
-            <p className="mt-5 max-w-xl text-white/75 sm:text-lg">
-              Tell us what you&apos;re looking for. We&apos;ll help you find it,
-              inspect it, and complete the purchase properly.
-            </p>
-          </Entrance>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="Contact"
+        title="Let's talk about your next property"
+        description="Tell us what you're looking for. We'll help you find it, inspect it, and complete the purchase properly."
+        image="/images/hero/abuja-hillside.jpg"
+        overlap
+      />
 
       <div className="relative z-10 mx-auto -mt-20 max-w-6xl px-4 sm:-mt-24 sm:px-6">
         <RevealGroup className="grid gap-4 md:grid-cols-3">
