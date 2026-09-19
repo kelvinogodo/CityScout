@@ -82,6 +82,15 @@ export function PostForm({
         <input type="hidden" name="body" value={body} />
         <TipTapEditor content={body} onChange={setBody} />
       </div>
+      <label className="flex items-center gap-2 text-sm">
+        <input
+          type="checkbox"
+          name="isPublished"
+          defaultChecked={post?.is_published ?? true}
+          className="h-4 w-4 accent-[hsl(var(--accent))]"
+        />
+        Published (untick to keep this post as a draft, hidden from the public)
+      </label>
       {state?.error && <p className="text-sm text-destructive">{state.error}</p>}
       <Button type="submit" disabled={isPending}>
         {isPending ? "Saving..." : post ? "Save changes" : "Create post"}

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { FileCheck, KeyRound, MapPinned, MessageCircle } from "lucide-react";
 import { HeroCarousel } from "@/components/site/hero-carousel";
 import { HeroSearch } from "@/components/site/hero-search";
 import { PropertyCard } from "@/components/site/property-card";
@@ -18,6 +19,29 @@ export const metadata: Metadata = {
   description:
     "City Scout Realtors helps you find properties for sale in Ebonyi State easily.",
 };
+
+const steps = [
+  {
+    icon: MessageCircle,
+    title: "Tell us what you need",
+    text: "Message us on WhatsApp or call with your budget, location and the kind of property you want.",
+  },
+  {
+    icon: MapPinned,
+    title: "Inspect in person",
+    text: "We arrange visits to matching properties so you see them for yourself before deciding.",
+  },
+  {
+    icon: FileCheck,
+    title: "Check the paperwork",
+    text: "Review the title documents and survey plan carefully, ideally with your own lawyer, before any payment.",
+  },
+  {
+    icon: KeyRound,
+    title: "Complete with confidence",
+    text: "Sign a written agreement, keep every receipt, and take ownership the proper way.",
+  },
+];
 
 export default async function HomePage() {
   const [properties, posts] = await Promise.all([
@@ -81,6 +105,40 @@ export default async function HomePage() {
             before they go public.
           </p>
         )}
+      </section>
+
+      <section className="border-t border-border">
+        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+          <Reveal className="max-w-2xl">
+            <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
+              How it works
+            </p>
+            <h2 className="mt-2 text-3xl font-semibold">
+              Buying a property, step by step
+            </h2>
+            <p className="mt-3 text-muted-foreground">
+              A property purchase should never feel rushed. Here is how we work
+              with you from first message to keys in hand.
+            </p>
+          </Reveal>
+          <RevealGroup className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {steps.map(({ icon: Icon, title, text }, index) => (
+              <RevealItem
+                key={title}
+                className="rounded-lg border border-border bg-surface p-6"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-accent text-sm font-semibold text-accent-foreground">
+                    {index + 1}
+                  </span>
+                  <Icon className="h-5 w-5 text-accent" />
+                </div>
+                <h3 className="mt-4 text-lg font-semibold">{title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{text}</p>
+              </RevealItem>
+            ))}
+          </RevealGroup>
+        </div>
       </section>
 
       <section className="border-t border-border bg-surface">

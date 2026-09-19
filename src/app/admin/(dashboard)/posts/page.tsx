@@ -5,11 +5,22 @@ import { Button } from "@/components/ui/button";
 import { DeleteButton } from "@/components/admin/delete-button";
 import { cn } from "@/lib/utils";
 import { SampleBadge } from "@/components/site/sample-badge";
-import { getPosts } from "@/lib/data/posts";
+import { DraftBadge } from "@/components/admin/draft-badge";
+import { Pagination } from "@/components/site/pagination";
+import { getPostsPage } from "@/lib/data/posts";
 import { deletePost } from "./actions";
 
-export default async function AdminPostsPage() {
-  const posts = await getPosts();
+const PAGE_SIZE = 15;
+
+export default async function AdminPostsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const { page: rawPage } = await searchParams;
+  const parsed = Number(rawPage);
+  const page = Number.isFinite(parsed) && parsed >= 1 ? Math.floor(parsed) : 1;
+  const { items: posts, totalPages } = await getPostsPage({}, page, PAGE_SIZE);
 
   return (
     <div>
@@ -54,6 +65,7 @@ export default async function AdminPostsPage() {
                     </div>
                     <span className="line-clamp-1 max-w-xs">{post.title}</span>
                     <SampleBadge show={post.is_sample} />
+                    <DraftBadge show={post.is_published === false} />
                   </div>
                 </td>
                 <td className="px-4 py-3">{post.author}</td>
@@ -84,6 +96,12 @@ export default async function AdminPostsPage() {
           </p>
         )}
       </div>
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        basePath="/admin/posts"
+        params={{}}
+      />
     </div>
   );
 }

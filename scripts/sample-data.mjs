@@ -10,6 +10,12 @@ export const sampleProperties = [
     location: "GRA, Abakaliki, Ebonyi State",
     price: 85000000,
     type: "house",
+    listing_status: "for_sale",
+    bedrooms: 4,
+    bathrooms: 5,
+    land_size_sqm: null,
+    title_document: "c_of_o",
+    price_negotiable: true,
     description:
       "Sample listing. A contemporary detached duplex with a brick-clad upper floor, tiled roof and a fully walled, gated compound. Shown for illustration of how listings appear on this site.",
     images: {
@@ -23,6 +29,12 @@ export const sampleProperties = [
     location: "Old Enugu Road, Abakaliki, Ebonyi State",
     price: 38500000,
     type: "house",
+    listing_status: "for_sale",
+    bedrooms: 3,
+    bathrooms: 3,
+    land_size_sqm: null,
+    title_document: null,
+    price_negotiable: false,
     description:
       "Sample listing. A row of well-kept bungalows with arched entrances, landscaped frontage and shaded parking under mature palms. Shown for illustration of how listings appear on this site.",
     images: {

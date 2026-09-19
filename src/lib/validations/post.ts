@@ -21,6 +21,8 @@ const postFields = {
   alt: z.string().trim().min(1, "Image alt text is required"),
   seoTitle: z.string().trim().min(1, "SEO title is required"),
   meta: z.string().trim().min(1, "Meta description is required"),
+  // HTML checkboxes submit "on" when ticked and are absent when not.
+  isPublished: z.preprocess((value) => value === "on" || value === true, z.boolean()),
 };
 
 export const createPostSchema = z.object({

@@ -5,11 +5,26 @@ import { Button } from "@/components/ui/button";
 import { DeleteButton } from "@/components/admin/delete-button";
 import { cn, formatPrice } from "@/lib/utils";
 import { SampleBadge } from "@/components/site/sample-badge";
-import { getProperties } from "@/lib/data/properties";
+import { DraftBadge } from "@/components/admin/draft-badge";
+import { Pagination } from "@/components/site/pagination";
+import { getPropertiesPage } from "@/lib/data/properties";
 import { deleteProperty } from "./actions";
 
-export default async function AdminPropertiesPage() {
-  const properties = await getProperties();
+const PAGE_SIZE = 15;
+
+export default async function AdminPropertiesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const { page: rawPage } = await searchParams;
+  const parsed = Number(rawPage);
+  const page = Number.isFinite(parsed) && parsed >= 1 ? Math.floor(parsed) : 1;
+  const { items: properties, totalPages } = await getPropertiesPage(
+    {},
+    page,
+    PAGE_SIZE,
+  );
 
   return (
     <div>
@@ -57,6 +72,7 @@ export default async function AdminPropertiesPage() {
                       {property.description}
                     </span>
                     <SampleBadge show={property.is_sample} />
+                    <DraftBadge show={property.is_published === false} />
                   </div>
                 </td>
                 <td className="px-4 py-3">{property.location}</td>
@@ -88,6 +104,12 @@ export default async function AdminPropertiesPage() {
           </p>
         )}
       </div>
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        basePath="/admin/properties"
+        params={{}}
+      />
     </div>
   );
 }
