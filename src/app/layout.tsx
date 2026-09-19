@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Poppins } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { JsonLd } from "@/components/json-ld";
 import { Providers } from "@/components/providers";
@@ -7,15 +7,10 @@ import { Toaster } from "@/components/ui/sonner";
 import { siteConfig } from "@/lib/site-config";
 import "./globals.css";
 
-const inter = Inter({
+const poppins = Poppins({
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-sans",
-  display: "swap",
-});
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  variable: "--font-display",
   display: "swap",
 });
 
@@ -72,7 +67,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
+    <html lang="en" className={poppins.variable}>
       <body className="min-h-screen font-sans antialiased">
         <JsonLd data={agencyJsonLd} />
         <Providers>{children}</Providers>

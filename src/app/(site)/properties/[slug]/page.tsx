@@ -2,7 +2,19 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { House, LandPlot, MapPin, MessageCircle, Phone } from "lucide-react";
+import {
+  Bath,
+  BedDouble,
+  FileCheck,
+  House,
+  LandPlot,
+  MapPin,
+  MessageCircle,
+  Phone,
+  Ruler,
+  Tag,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/utils";
 import { getPropertyBySlug } from "@/lib/data/properties";
@@ -51,68 +63,95 @@ export default async function PropertyDetailPage({
     property.back_view_image,
   ];
 
-  const TypeIcon = property.type === "house" ? House : LandPlot;
   const isRent = property.listing_status === "for_rent";
+  const TypeIcon = property.type === "house" ? House : LandPlot;
 
-  const facts: [string, string][] = [
-    ["Status", LISTING_STATUS_LABELS[property.listing_status ?? "for_sale"]],
-    ["Type", property.type === "house" ? "House" : "Land"],
+  const facts: { icon: LucideIcon; label: string; value: string }[] = [
+    {
+      icon: Tag,
+      label: "Status",
+      value: LISTING_STATUS_LABELS[property.listing_status ?? "for_sale"],
+    },
+    {
+      icon: TypeIcon,
+      label: "Type",
+      value: property.type === "house" ? "House" : "Land",
+    },
   ];
-  if (property.bedrooms != null) facts.push(["Bedrooms", String(property.bedrooms)]);
-  if (property.bathrooms != null) facts.push(["Bathrooms", String(property.bathrooms)]);
+  if (property.bedrooms != null) {
+    facts.push({ icon: BedDouble, label: "Bedrooms", value: String(property.bedrooms) });
+  }
+  if (property.bathrooms != null) {
+    facts.push({ icon: Bath, label: "Bathrooms", value: String(property.bathrooms) });
+  }
   if (property.land_size_sqm != null) {
-    facts.push(["Land size", `${property.land_size_sqm} sqm`]);
+    facts.push({
+      icon: Ruler,
+      label: "Land size",
+      value: `${property.land_size_sqm.toLocaleString("en-NG")} sqm`,
+    });
   }
   if (property.title_document) {
-    facts.push(["Title document", TITLE_DOCUMENT_LABELS[property.title_document]]);
+    facts.push({
+      icon: FileCheck,
+      label: "Title document",
+      value: TITLE_DOCUMENT_LABELS[property.title_document],
+    });
   }
 
   const enquiry = `Hello CityScout Realtors, I'm interested in the property at ${property.location} (${formatPrice(property.price)}). ${siteConfig.url}/properties/${property.slug}`;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-      <div className="grid gap-2 sm:grid-cols-3">
-        <div className="relative aspect-[4/3] overflow-hidden rounded-lg sm:col-span-2 sm:aspect-[16/9]">
+    <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+      <div className="grid h-[320px] grid-cols-3 grid-rows-2 gap-2 sm:h-[480px] sm:gap-3">
+        <div className="relative col-span-2 row-span-2 overflow-hidden rounded-2xl bg-muted">
           <Image
             src={images[0]!}
-            alt={property.description}
+            alt={`${property.type} in ${property.location}`}
             fill
-            sizes="(min-width: 640px) 66vw, 100vw"
+            sizes="(min-width: 1152px) 760px, 66vw"
             className="object-cover"
             priority
           />
         </div>
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-1">
-          {images.slice(1).map((src, index) => (
-            <div
-              key={src}
-              className="relative aspect-[4/3] overflow-hidden rounded-lg"
-            >
-              <Image
-                src={src}
-                alt={`${property.description} view ${index + 2}`}
-                fill
-                sizes="33vw"
-                className="object-cover"
-              />
-            </div>
-          ))}
-        </div>
+        {images.slice(1).map((src, index) => (
+          <div
+            key={src}
+            className="relative overflow-hidden rounded-2xl bg-muted"
+          >
+            <Image
+              src={src}
+              alt={`${property.type} in ${property.location}, view ${index + 2}`}
+              fill
+              sizes="(min-width: 1152px) 380px, 33vw"
+              className="object-cover"
+            />
+          </div>
+        ))}
       </div>
 
-      <div className="mt-8 grid gap-8 lg:grid-cols-3">
+      <div className="mt-10 grid gap-10 lg:grid-cols-3">
         <div className="lg:col-span-2">
           {property.is_sample && (
-            <p className="mb-4 rounded-md border border-border bg-muted px-3 py-2 text-sm text-muted-foreground">
+            <p className="mb-6 rounded-xl border border-border bg-muted px-4 py-3 text-sm text-muted-foreground">
               This is a sample listing shown for illustration. It is not a
-              property currently available for sale.
+              property currently available.
             </p>
           )}
-          <span className="inline-flex items-center gap-1 rounded-full bg-accent px-3 py-1 text-xs font-medium capitalize text-accent-foreground">
-            <TypeIcon className="h-3.5 w-3.5" />
-            {property.type}
-          </span>
-          <h1 className="mt-3 text-3xl font-semibold">
+
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-accent px-3 py-1.5 text-xs font-semibold capitalize text-accent-foreground">
+              <TypeIcon className="h-3.5 w-3.5" />
+              {property.type}
+            </span>
+            {property.price_negotiable && (
+              <span className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold">
+                Price negotiable
+              </span>
+            )}
+          </div>
+
+          <h1 className="mt-4 text-4xl font-semibold sm:text-5xl">
             {formatPrice(property.price)}
             {isRent && (
               <span className="text-lg font-normal text-muted-foreground">
@@ -121,55 +160,62 @@ export default async function PropertyDetailPage({
               </span>
             )}
           </h1>
-          {property.price_negotiable && (
-            <p className="mt-1 text-sm font-medium text-accent">
-              Price negotiable
-            </p>
-          )}
-          <p className="mt-2 flex items-center gap-1 text-muted-foreground">
-            <MapPin className="h-4 w-4" />
+          <p className="mt-3 flex items-center gap-2 text-muted-foreground">
+            <MapPin className="h-4 w-4 shrink-0" />
             {property.location}
           </p>
 
-          <dl className="mt-6 grid gap-x-8 gap-y-3 rounded-lg border border-border bg-surface p-5 text-sm sm:grid-cols-2">
-            {facts.map(([label, value]) => (
-              <div key={label} className="flex justify-between gap-4">
-                <dt className="text-muted-foreground">{label}</dt>
-                <dd className="text-right font-medium">{value}</dd>
+          <dl className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3">
+            {facts.map(({ icon: Icon, label, value }) => (
+              <div
+                key={label}
+                className="rounded-xl border border-border bg-surface p-4"
+              >
+                <Icon className="h-5 w-5 text-accent" />
+                <dt className="mt-3 text-xs uppercase tracking-wider text-muted-foreground">
+                  {label}
+                </dt>
+                <dd className="mt-1 text-sm font-semibold leading-snug">
+                  {value}
+                </dd>
               </div>
             ))}
           </dl>
 
-          <p className="mt-6 whitespace-pre-line leading-relaxed text-foreground">
+          <h2 className="mt-10 text-xl font-semibold">About this property</h2>
+          <p className="mt-3 whitespace-pre-line leading-relaxed text-muted-foreground">
             {property.description}
           </p>
         </div>
 
-        <div className="h-fit space-y-3 rounded-lg border border-border bg-surface p-6">
-          <h2 className="text-lg font-semibold">Interested in this property?</h2>
-          <p className="text-sm text-muted-foreground">
-            Message us on WhatsApp for the quickest response, or call to arrange
-            an inspection.
-          </p>
-          <Button
-            asChild
-            className="w-full gap-2 bg-[#25D366] text-black hover:bg-[#25D366]/90"
-          >
-            <a href={whatsappLink(enquiry)} target="_blank" rel="noreferrer">
-              <MessageCircle className="h-4 w-4" />
-              Chat on WhatsApp
-            </a>
-          </Button>
-          <Button asChild variant="outline" className="w-full gap-2">
-            <a href={`tel:${siteConfig.phone}`}>
-              <Phone className="h-4 w-4" />
-              Call {siteConfig.phoneDisplay}
-            </a>
-          </Button>
-          <Button asChild variant="ghost" className="w-full">
-            <Link href="/contact">Send a message</Link>
-          </Button>
-        </div>
+        <aside className="lg:sticky lg:top-24 lg:self-start">
+          <div className="space-y-3 rounded-2xl border border-border bg-surface p-6 shadow-sm">
+            <h2 className="text-lg font-semibold">Interested in this property?</h2>
+            <p className="text-sm text-muted-foreground">
+              Message us on WhatsApp for the quickest response, or call to
+              arrange an inspection.
+            </p>
+            <Button
+              asChild
+              size="lg"
+              className="w-full gap-2 bg-[#25D366] text-black hover:bg-[#25D366]/90"
+            >
+              <a href={whatsappLink(enquiry)} target="_blank" rel="noreferrer">
+                <MessageCircle className="h-4 w-4" />
+                Chat on WhatsApp
+              </a>
+            </Button>
+            <Button asChild variant="outline" size="lg" className="w-full gap-2">
+              <a href={`tel:${siteConfig.phone}`}>
+                <Phone className="h-4 w-4" />
+                Call {siteConfig.phoneDisplay}
+              </a>
+            </Button>
+            <Button asChild variant="ghost" className="w-full">
+              <Link href="/contact">Send a message</Link>
+            </Button>
+          </div>
+        </aside>
       </div>
     </div>
   );

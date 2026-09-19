@@ -1,5 +1,18 @@
 import { describe, expect, it } from "vitest";
-import { cn, formatPrice, slugify } from "./utils";
+import { cn, formatPrice, shortLocation, slugify } from "./utils";
+
+describe("shortLocation", () => {
+  it("keeps the first two parts by default", () => {
+    expect(shortLocation("Old Enugu Road, Abakaliki, Ebonyi State")).toBe(
+      "Old Enugu Road, Abakaliki",
+    );
+  });
+
+  it("leaves short locations alone and ignores stray commas", () => {
+    expect(shortLocation("Ishielu")).toBe("Ishielu");
+    expect(shortLocation(" , Ishielu, , Ebonyi ")).toBe("Ishielu, Ebonyi");
+  });
+});
 
 describe("cn", () => {
   it("merges class names and resolves Tailwind conflicts", () => {

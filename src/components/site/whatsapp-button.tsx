@@ -2,9 +2,18 @@
 
 import { motion } from "framer-motion";
 import { MessageCircle } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { whatsappLink } from "@/lib/site-config";
 
 export function WhatsAppButton() {
+  const pathname = usePathname();
+
+  // Property pages and the contact page already have their own prominent
+  // WhatsApp button; a second floating one just overlaps it.
+  if (pathname.startsWith("/properties/") || pathname === "/contact") {
+    return null;
+  }
+
   return (
     <motion.a
       href={whatsappLink("Hello CityScout Realtors, I'd like to make an enquiry.")}
