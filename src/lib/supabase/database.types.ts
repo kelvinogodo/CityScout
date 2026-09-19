@@ -12,15 +12,17 @@ export type PropertyRow = {
   front_view_image: string;
   side_view_image: string;
   back_view_image: string;
+  is_sample: boolean;
   created_at: string;
   updated_at: string;
 };
 
 export type PropertyInsert = Omit<
   PropertyRow,
-  "id" | "created_at" | "updated_at"
+  "id" | "created_at" | "updated_at" | "is_sample"
 > & {
   id?: string;
+  is_sample?: boolean;
   created_at?: string;
   updated_at?: string;
 };
@@ -38,12 +40,17 @@ export type PostRow = {
   alt: string;
   seo_title: string;
   meta: string;
+  is_sample: boolean;
   created_at: string;
   updated_at: string;
 };
 
-export type PostInsert = Omit<PostRow, "id" | "created_at" | "updated_at"> & {
+export type PostInsert = Omit<
+  PostRow,
+  "id" | "created_at" | "updated_at" | "is_sample"
+> & {
   id?: string;
+  is_sample?: boolean;
   created_at?: string;
   updated_at?: string;
 };

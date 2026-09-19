@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { PropertyCard } from "@/components/site/property-card";
+import { RevealGroup, RevealItem } from "@/components/site/reveal";
 import { PropertyFilters } from "@/components/site/property-filters";
 import { getProperties, type PropertyType } from "@/lib/data/properties";
 
@@ -49,11 +50,13 @@ export default async function PropertiesPage({
       </div>
 
       {properties.length > 0 ? (
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <RevealGroup className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {properties.map((property) => (
-            <PropertyCard key={property.id} property={property} />
+            <RevealItem key={property.id}>
+              <PropertyCard property={property} />
+            </RevealItem>
           ))}
-        </div>
+        </RevealGroup>
       ) : (
         <p className="mt-8 text-muted-foreground">
           No properties match your search. Try a broader filter.

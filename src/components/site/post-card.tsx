@@ -1,13 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Star } from "lucide-react";
+import { SampleBadge } from "@/components/site/sample-badge";
 import type { Post } from "@/lib/data/posts";
 
 export function PostCard({ post }: { post: Post }) {
   return (
     <Link
       href={`/blog/${post.slug}`}
-      className="group block overflow-hidden rounded-lg border border-border bg-surface transition-shadow hover:shadow-lg"
+      className="group block overflow-hidden rounded-lg border border-border bg-surface transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
     >
       <div className="relative aspect-[16/10] overflow-hidden">
         <Image
@@ -23,6 +24,10 @@ export function PostCard({ post }: { post: Post }) {
             Featured
           </span>
         )}
+        <SampleBadge
+          show={post.is_sample}
+          className="absolute right-3 top-3"
+        />
       </div>
       <div className="space-y-2 p-4">
         <h3 className="line-clamp-2 text-lg font-semibold">{post.title}</h3>

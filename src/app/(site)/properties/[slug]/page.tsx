@@ -81,6 +81,12 @@ export default async function PropertyDetailPage({
 
       <div className="mt-8 grid gap-8 lg:grid-cols-3">
         <div className="lg:col-span-2">
+          {property.is_sample && (
+            <p className="mb-4 rounded-md border border-border bg-muted px-3 py-2 text-sm text-muted-foreground">
+              This is a sample listing shown for illustration. It is not a
+              property currently available for sale.
+            </p>
+          )}
           <span className="inline-flex items-center gap-1 rounded-full bg-accent px-3 py-1 text-xs font-medium capitalize text-accent-foreground">
             <TypeIcon className="h-3.5 w-3.5" />
             {property.type}
