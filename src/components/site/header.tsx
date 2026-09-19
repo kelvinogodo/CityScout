@@ -41,11 +41,11 @@ export function Header() {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         <Link href="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
           <Image
-            src="/cityScoutlogo.png"
-            alt="CityScout Realtors"
+            src="/logo-mark.png"
+            alt=""
             width={36}
-            height={36}
-            className="h-9 w-9 object-contain"
+            height={37}
+            className="h-9 w-auto"
             priority
           />
           <span className="font-display text-xl font-semibold tracking-tight">
