@@ -60,23 +60,56 @@ export function ContactForm() {
       onFocusCapture={() => {
         if (!openedAt.current) openedAt.current = Date.now();
       }}
-      className="space-y-4 rounded-lg border border-border bg-surface p-6"
+      className="space-y-5 rounded-2xl border border-border bg-background p-6 shadow-sm sm:p-8"
     >
-      <div className="space-y-2">
-        <Label htmlFor="user_name">Name</Label>
-        <Input id="user_name" name="user_name" required />
+      <div className="grid gap-5 sm:grid-cols-2">
+        <div className="space-y-2">
+          <Label htmlFor="user_name">Name</Label>
+          <Input
+            id="user_name"
+            name="user_name"
+            required
+            autoComplete="name"
+            placeholder="Your full name"
+            className="h-12 rounded-xl"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="phone_number">Phone number</Label>
+          <Input
+            id="phone_number"
+            name="phone_number"
+            type="tel"
+            required
+            autoComplete="tel"
+            placeholder="0800 000 0000"
+            className="h-12 rounded-xl"
+          />
+        </div>
       </div>
       <div className="space-y-2">
-        <Label htmlFor="phone_number">Phone number</Label>
-        <Input id="phone_number" name="phone_number" type="tel" required />
+        <Label htmlFor="user_email">
+          Email <span className="font-normal text-muted-foreground">(optional)</span>
+        </Label>
+        <Input
+          id="user_email"
+          name="user_email"
+          type="email"
+          autoComplete="email"
+          placeholder="you@example.com"
+          className="h-12 rounded-xl"
+        />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="user_email">Email</Label>
-        <Input id="user_email" name="user_email" type="email" />
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="message">Message</Label>
-        <Textarea id="message" name="message" rows={5} required />
+        <Label htmlFor="message">How can we help?</Label>
+        <Textarea
+          id="message"
+          name="message"
+          rows={5}
+          required
+          placeholder="Tell us the kind of property, location and budget you have in mind."
+          className="rounded-xl"
+        />
       </div>
       <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
         <label htmlFor="company">Company</label>
@@ -88,7 +121,12 @@ export function ContactForm() {
           autoComplete="off"
         />
       </div>
-      <Button type="submit" disabled={isSending} className="w-full">
+      <Button
+        type="submit"
+        size="lg"
+        disabled={isSending}
+        className="h-12 w-full rounded-xl text-base"
+      >
         {isSending ? "Sending..." : "Send message"}
       </Button>
     </form>
