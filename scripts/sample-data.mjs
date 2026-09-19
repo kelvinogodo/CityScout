@@ -43,6 +43,82 @@ export const sampleProperties = [
       back: "samples/abuja-bungalows-entrance.jpg",
     },
   },
+  {
+    slug: "sample-tower-apartment-abakaliki",
+    location: "CBD, Abakaliki, Ebonyi State",
+    price: 4500000,
+    type: "house",
+    listing_status: "for_rent",
+    bedrooms: 3,
+    bathrooms: 4,
+    land_size_sqm: null,
+    title_document: null,
+    price_negotiable: false,
+    description:
+      "Sample listing. A spacious three-bedroom apartment in a secure residential tower with covered entrance, parking and a landscaped forecourt. Rent is quoted per year. Shown for illustration of how rental listings appear on this site.",
+    images: {
+      front: "samples/lagos-tower-front.jpg",
+      side: "samples/lagos-development.jpg",
+      back: "samples/lagos-tower-dusk.jpg",
+    },
+  },
+  {
+    slug: "sample-farmland-plantation-ishielu",
+    location: "Ishielu, Ebonyi State",
+    price: 12000000,
+    type: "land",
+    listing_status: "for_sale",
+    bedrooms: null,
+    bathrooms: null,
+    land_size_sqm: 20000,
+    title_document: "survey_plan",
+    price_negotiable: true,
+    description:
+      "Sample listing. Two hectares of established plantation land with farm tracks between the blocks and water nearby. Suited to agriculture or agri-business. Shown for illustration of how land listings appear on this site.",
+    images: {
+      front: "samples/farm-plantation-aerial.jpg",
+      side: "samples/farm-plantation-blocks.jpg",
+      back: "samples/farm-plantation-paths.jpg",
+    },
+  },
+  {
+    slug: "sample-green-estate-plot-afikpo",
+    location: "Afikpo North, Ebonyi State",
+    price: 6500000,
+    type: "land",
+    listing_status: "for_sale",
+    bedrooms: null,
+    bathrooms: null,
+    land_size_sqm: 648,
+    title_document: "c_of_o",
+    price_negotiable: false,
+    description:
+      "Sample listing. A full plot in a quiet, green setting with mature trees, a motorable access road and nearby institutions. Shown for illustration of how land listings appear on this site.",
+    images: {
+      front: "samples/plateau-front.jpg",
+      side: "samples/plateau-buildings.jpg",
+      back: "samples/plateau-grounds.jpg",
+    },
+  },
+  {
+    slug: "sample-neighbourhood-plots-abakaliki",
+    location: "Enugu Expressway, Abakaliki, Ebonyi State",
+    price: 9500000,
+    type: "land",
+    listing_status: "for_sale",
+    bedrooms: null,
+    bathrooms: null,
+    land_size_sqm: 600,
+    title_document: "governors_consent",
+    price_negotiable: true,
+    description:
+      "Sample listing. A residential plot within an established, fast-growing neighbourhood, close to the main road, markets and schools. Shown for illustration of how land listings appear on this site.",
+    images: {
+      front: "samples/neighbourhood-town.jpg",
+      side: "hero/abuja-hillside.jpg",
+      back: "hero/city-palms.jpg",
+    },
+  },
 ];
 
 const disclaimer =

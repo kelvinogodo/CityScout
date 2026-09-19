@@ -32,7 +32,7 @@ export default async function BlogPage({
 
       {items.length > 0 ? (
         <>
-          <RevealGroup className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <RevealGroup className="mt-10 grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
             {items.map((post) => (
               <RevealItem key={post.id}>
                 <PostCard post={post} />

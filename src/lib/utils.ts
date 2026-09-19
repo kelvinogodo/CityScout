@@ -13,6 +13,16 @@ export function formatPrice(price: number) {
   }).format(price);
 }
 
+// "Old Enugu Road, Abakaliki, Ebonyi State" -> "Old Enugu Road, Abakaliki"
+export function shortLocation(location: string, parts = 2) {
+  return location
+    .split(",")
+    .map((part) => part.trim())
+    .filter(Boolean)
+    .slice(0, parts)
+    .join(", ");
+}
+
 export function slugify(input: string) {
   return input
     .toLowerCase()
