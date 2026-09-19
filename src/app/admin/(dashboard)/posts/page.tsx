@@ -4,6 +4,7 @@ import { Plus, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DeleteButton } from "@/components/admin/delete-button";
 import { cn } from "@/lib/utils";
+import { SampleBadge } from "@/components/site/sample-badge";
 import { getPosts } from "@/lib/data/posts";
 import { deletePost } from "./actions";
 
@@ -52,6 +53,7 @@ export default async function AdminPostsPage() {
                       />
                     </div>
                     <span className="line-clamp-1 max-w-xs">{post.title}</span>
+                    <SampleBadge show={post.is_sample} />
                   </div>
                 </td>
                 <td className="px-4 py-3">{post.author}</td>

@@ -4,6 +4,7 @@ import { Plus, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DeleteButton } from "@/components/admin/delete-button";
 import { cn, formatPrice } from "@/lib/utils";
+import { SampleBadge } from "@/components/site/sample-badge";
 import { getProperties } from "@/lib/data/properties";
 import { deleteProperty } from "./actions";
 
@@ -55,6 +56,7 @@ export default async function AdminPropertiesPage() {
                     <span className="line-clamp-1 max-w-xs">
                       {property.description}
                     </span>
+                    <SampleBadge show={property.is_sample} />
                   </div>
                 </td>
                 <td className="px-4 py-3">{property.location}</td>

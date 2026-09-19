@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { PostCard } from "@/components/site/post-card";
+import { RevealGroup, RevealItem } from "@/components/site/reveal";
 import { getPosts } from "@/lib/data/posts";
 
 export const metadata: Metadata = {
@@ -19,11 +20,13 @@ export default async function BlogPage() {
       </p>
 
       {posts.length > 0 ? (
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <RevealGroup className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {posts.map((post) => (
-            <PostCard key={post.id} post={post} />
+            <RevealItem key={post.id}>
+              <PostCard post={post} />
+            </RevealItem>
           ))}
-        </div>
+        </RevealGroup>
       ) : (
         <p className="mt-8 text-muted-foreground">
           No posts published yet — check back soon.

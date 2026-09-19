@@ -42,6 +42,15 @@
   border-color: hsl(var(--border));
 }
 
+@layer base {
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display), Georgia, serif;
+    letter-spacing: -0.01em;
+  }
+}
+
 body {
   background: hsl(var(--background));
   color: hsl(var(--foreground));

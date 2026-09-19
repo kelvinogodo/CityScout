@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { House, LandPlot, MapPin } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
+import { SampleBadge } from "@/components/site/sample-badge";
 import type { Property } from "@/lib/data/properties";
 
 const TYPE_ICON = { house: House, land: LandPlot } as const;
@@ -12,7 +13,7 @@ export function PropertyCard({ property }: { property: Property }) {
   return (
     <Link
       href={`/properties/${property.slug}`}
-      className="group block overflow-hidden rounded-lg border border-border bg-surface transition-shadow hover:shadow-lg"
+      className="group block overflow-hidden rounded-lg border border-border bg-surface transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
     >
       <div className="relative aspect-[4/3] overflow-hidden">
         <Image
@@ -26,6 +27,10 @@ export function PropertyCard({ property }: { property: Property }) {
           <TypeIcon className="h-3.5 w-3.5" />
           {property.type}
         </span>
+        <SampleBadge
+          show={property.is_sample}
+          className="absolute right-3 top-3"
+        />
       </div>
       <div className="space-y-2 p-4">
         <p className="text-lg font-semibold">{formatPrice(property.price)}</p>

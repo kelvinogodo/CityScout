@@ -37,6 +37,11 @@ export default async function PostDetailPage({ params }: { params: Params }) {
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
+      {post.is_sample && (
+        <p className="mb-4 rounded-md border border-border bg-muted px-3 py-2 text-sm text-muted-foreground">
+          Sample article shown for illustration.
+        </p>
+      )}
       {post.category === "featured" && (
         <span className="inline-flex items-center gap-1 rounded-full bg-accent px-3 py-1 text-xs font-medium text-accent-foreground">
           <Star className="h-3.5 w-3.5 fill-current" />

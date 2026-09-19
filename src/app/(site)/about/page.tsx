@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { Lightbulb, ShieldCheck, Users, TrendingUp } from "lucide-react";
+import { RevealGroup, RevealItem } from "@/components/site/reveal";
 
 export const metadata: Metadata = {
   title: "About",
@@ -61,36 +62,36 @@ export default function AboutPage() {
       <section className="mt-16">
         <h2 className="text-2xl font-semibold">What we stand for</h2>
         <div className="mt-2 h-1 w-16 bg-accent" />
-        <div className="mt-8 grid gap-6 sm:grid-cols-2">
+        <RevealGroup className="mt-8 grid gap-6 sm:grid-cols-2">
           {values.map(({ icon: Icon, title, text }) => (
-            <div
+            <RevealItem
               key={title}
               className="rounded-lg border border-border bg-surface p-6"
             >
               <Icon className="h-6 w-6 text-accent" />
               <h3 className="mt-3 font-semibold">{title}</h3>
               <p className="mt-2 text-sm text-muted-foreground">{text}</p>
-            </div>
+            </RevealItem>
           ))}
-        </div>
+        </RevealGroup>
       </section>
 
-      <section className="mt-16 grid gap-6 sm:grid-cols-2">
-        <div className="rounded-lg border border-border bg-surface p-6">
+      <RevealGroup className="mt-16 grid gap-6 sm:grid-cols-2">
+        <RevealItem className="rounded-lg border border-border bg-surface p-6">
           <h2 className="text-xl font-semibold">Our Vision</h2>
           <p className="mt-2 text-muted-foreground">
             To easily connect real estate investors to the right properties in
             Ebonyi State and drive seamless acquisition.
           </p>
-        </div>
-        <div className="rounded-lg border border-border bg-surface p-6">
+        </RevealItem>
+        <RevealItem className="rounded-lg border border-border bg-surface p-6">
           <h2 className="text-xl font-semibold">Our Mission</h2>
           <p className="mt-2 text-muted-foreground">
             To unlock the full potential of real estate in the region through
             technology and innovation.
           </p>
-        </div>
-      </section>
+        </RevealItem>
+      </RevealGroup>
     </div>
   );
 }

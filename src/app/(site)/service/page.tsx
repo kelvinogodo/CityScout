@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { TrendingUp, Building2 } from "lucide-react";
+import { RevealGroup, RevealItem } from "@/components/site/reveal";
 
 export const metadata: Metadata = {
   title: "Service",
@@ -28,18 +29,18 @@ export default function ServicePage() {
         Real estate brokerage and development for Ebonyi State, Nigeria.
       </p>
 
-      <div className="mt-8 grid gap-6 sm:grid-cols-2">
+      <RevealGroup className="mt-8 grid gap-6 sm:grid-cols-2">
         {services.map(({ icon: Icon, title, text }) => (
-          <div
+          <RevealItem
             key={title}
             className="rounded-lg border border-border bg-surface p-6"
           >
             <Icon className="h-8 w-8 text-accent" />
             <h2 className="mt-4 text-lg font-semibold">{title}</h2>
             <p className="mt-2 text-sm text-muted-foreground">{text}</p>
-          </div>
+          </RevealItem>
         ))}
-      </div>
+      </RevealGroup>
     </div>
   );
 }
